@@ -7,7 +7,6 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace JsonApiSerializer.Util
 {
@@ -142,9 +141,9 @@ namespace JsonApiSerializer.Util
             {
                 propValue = overrideConverter.ReadJson(value, property.PropertyType, null, serializer);
             }
-            else if (property.MemberConverter != null && property.MemberConverter.CanRead)
+            else if (property.Converter != null && property.Converter.CanRead)
             {
-                propValue = property.MemberConverter.ReadJson(value, property.PropertyType, null, serializer);
+                propValue = property.Converter.ReadJson(value, property.PropertyType, null, serializer);
             }
             else
             {
@@ -233,9 +232,6 @@ namespace JsonApiSerializer.Util
                         if (reader.Path == path)
                             return;
                         break;
-                    default:
-                        break;
-
                 }
             } while (reader.Read());
 
@@ -254,7 +250,7 @@ namespace JsonApiSerializer.Util
                     return true;
                 }
             }
-            value = default(object);
+            value = default;
             return false;
         }
 

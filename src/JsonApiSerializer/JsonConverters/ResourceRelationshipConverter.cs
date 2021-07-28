@@ -1,16 +1,12 @@
 ﻿using JsonApiSerializer.ContractResolvers;
 using JsonApiSerializer.ContractResolvers.Contracts;
 using JsonApiSerializer.Exceptions;
-using JsonApiSerializer.JsonApi;
 using JsonApiSerializer.JsonApi.WellKnown;
 using JsonApiSerializer.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace JsonApiSerializer.JsonConverters
 {
@@ -57,7 +53,7 @@ namespace JsonApiSerializer.JsonConverters
                 return;
             }
 
-           
+
             writer.WriteStartObject();
             var hasMandatoryField = false;
             for (var i = 0; i < rrc.Properties.Count; i++)
@@ -94,14 +90,14 @@ namespace JsonApiSerializer.JsonConverters
                 WriteNullOrEmpty(writer, rrc.DataProperty.PropertyType, serializer);
             }
 
-            
+
             writer.WriteEndObject();
 
         }
 
         public void WriteNullableJson(JsonWriter writer, Type declaredType, object value, JsonSerializer serializer)
         {
-            // WriteJson should NEVER be passed a null a value, 
+            // WriteJson should NEVER be passed a null a value,
             // so we will handle nulls seperately here
             if(value == null)
             {
@@ -114,7 +110,7 @@ namespace JsonApiSerializer.JsonConverters
             {
                 WriteJson(writer, value, serializer);
             }
-                
+
         }
 
         private void WriteNullOrEmpty(JsonWriter writer, Type declaredType, JsonSerializer serializer)
@@ -124,7 +120,7 @@ namespace JsonApiSerializer.JsonConverters
             //if its a null relationship, we want to know what hte data field was
             if (contract is ResourceRelationshipContract rrc)
                 contract = serializer.ContractResolver.ResolveContract(rrc.DataProperty.PropertyType);
-            
+
             if (contract is JsonArrayContract)
             {
                 writer.WriteStartArray();
@@ -134,7 +130,7 @@ namespace JsonApiSerializer.JsonConverters
             {
                 writer.WriteNull();
             }
-            
+
         }
 
         public override bool CanRead => true;
@@ -161,7 +157,7 @@ namespace JsonApiSerializer.JsonConverters
 
             //create a new relationship object and start populating the properties
             var obj = rrc.DefaultCreator();
-            
+
             foreach (var propName in ReaderUtil.IterateProperties(reader))
             {
                 switch (propName)

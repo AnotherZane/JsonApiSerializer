@@ -1,7 +1,6 @@
 ﻿using JsonApiSerializer.ContractResolvers;
 using JsonApiSerializer.ContractResolvers.Contracts;
 using JsonApiSerializer.Exceptions;
-using JsonApiSerializer.JsonApi.WellKnown;
 using JsonApiSerializer.JsonConverters;
 using JsonApiSerializer.SerializationState;
 using Newtonsoft.Json;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace JsonApiSerializer.Util
 {

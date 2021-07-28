@@ -114,15 +114,15 @@ namespace JsonApiSerializer.JsonConverters
                         if (prop == null)
                             continue;
 
-                        // This is a massive hack. MemberConverters used to work and allowed
+                        // This is a massive hack. Converters used to work and allowed
                         // modifying a members create object. Unfortunatly Resource Identifiers
                         // are no longer created by this object converter. We are passing the
                         // convertor via the serialization data so ResourceIdentifierConverter
                         // can access it down the line.
                         // next breaking change remove support for ResourceObjectConverter 
                         // member converters
-                        if (prop.MemberConverter != null)
-                            serializationData.ConverterStack.Push(prop.MemberConverter);
+                        if (prop.Converter != null)
+                            serializationData.ConverterStack.Push(prop.Converter);
 
                         ReaderUtil.TryPopulateProperty(
                           serializer,
@@ -131,7 +131,7 @@ namespace JsonApiSerializer.JsonConverters
                           reader,
                           overrideConverter: contractResolver.ResourceRelationshipConverter);
 
-                        if (prop.MemberConverter != null)
+                        if (prop.Converter != null)
                             serializationData.ConverterStack.Pop();
                     }
                 }
@@ -235,9 +235,9 @@ namespace JsonApiSerializer.JsonConverters
                         writer.WriteStartObject();
                     }
                     writer.WritePropertyName(attributeProperty.PropertyName);
-                    if (attributeProperty.MemberConverter?.CanWrite == true)
+                    if (attributeProperty.Converter?.CanWrite == true)
                     {
-                        attributeProperty.MemberConverter.WriteJson(writer, attributeValue, serializer);
+                        attributeProperty.Converter.WriteJson(writer, attributeValue, serializer);
                     }
                     else if (attributeValue is string attributeString)
                     {
@@ -275,8 +275,8 @@ namespace JsonApiSerializer.JsonConverters
                     writer.WriteStartObject();
                 }
 
-                if (relationshipProperty.MemberConverter != null)
-                    serializationData.ConverterStack.Push(relationshipProperty.MemberConverter);
+                if (relationshipProperty.Converter != null)
+                    serializationData.ConverterStack.Push(relationshipProperty.Converter);
 
                 writer.WritePropertyName(relationshipProperty.PropertyName);
                 jsonApiContractResolver.ResourceRelationshipConverter.WriteNullableJson(
@@ -285,7 +285,7 @@ namespace JsonApiSerializer.JsonConverters
                     relationshipValue,
                     serializer);
 
-                if (relationshipProperty.MemberConverter != null)
+                if (relationshipProperty.Converter != null)
                     serializationData.ConverterStack.Pop();
 
             }
@@ -303,8 +303,8 @@ namespace JsonApiSerializer.JsonConverters
                         writer.WriteStartObject();
                     }
 
-                    if (relationshipProperty.MemberConverter != null)
-                        serializationData.ConverterStack.Push(relationshipProperty.MemberConverter);
+                    if (relationshipProperty.Converter != null)
+                        serializationData.ConverterStack.Push(relationshipProperty.Converter);
 
                     writer.WritePropertyName(relationshipProperty.PropertyName);
                     jsonApiContractResolver.ResourceRelationshipConverter.WriteNullableJson(
@@ -313,7 +313,7 @@ namespace JsonApiSerializer.JsonConverters
                         relationshipValue,
                         serializer);
 
-                    if (relationshipProperty.MemberConverter != null)
+                    if (relationshipProperty.Converter != null)
                         serializationData.ConverterStack.Pop();
                 }
             }

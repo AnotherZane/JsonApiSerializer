@@ -1,14 +1,11 @@
-﻿using JsonApiSerializer.ContractResolvers;
-using JsonApiSerializer.ContractResolvers.Contracts;
+﻿using JsonApiSerializer.ContractResolvers.Contracts;
 using JsonApiSerializer.Exceptions;
-using JsonApiSerializer.JsonApi.WellKnown;
 using JsonApiSerializer.SerializationState;
 using JsonApiSerializer.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace JsonApiSerializer.JsonConverters
 {
@@ -23,7 +20,7 @@ namespace JsonApiSerializer.JsonConverters
 
         public static bool CanConvertStatic(Type objectType, JsonConverter elementConvertor)
         {
-            return ListUtil.IsList(objectType, out Type elementType) 
+            return ListUtil.IsList(objectType, out Type elementType)
                 && elementConvertor.CanConvert(elementType);
         }
 
@@ -31,7 +28,7 @@ namespace JsonApiSerializer.JsonConverters
         {
             return CanConvertStatic(objectType, ResourceObjectConverter);
         }
-        
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var serializationData = SerializationData.GetSerializationData(reader);
