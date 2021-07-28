@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace JsonApiSerializer.Util
@@ -92,6 +93,12 @@ namespace JsonApiSerializer.Util
 
         private static string CalculateDefaultJsonApiTypeFromObjectType(Type objectType, SerializationData serializationData, JsonSerializer serializer)
         {
+            // Use ResourceTypeAttribute cause more clean
+            var attr = objectType.GetTypeInfo().GetCustomAttribute<ResourceTypeAttribute>();
+
+            if (attr != null)
+                return attr.Name;
+
             // Hack: To keep backward compatability we are not sure what resouceObjectConverter to use
             // we need to check if either one was defined as a serializer, or if one was defined as
             // furher up the stack (i.e. a member converter)
@@ -113,7 +120,7 @@ namespace JsonApiSerializer.Util
                 {
                     return defaultRoc.DefaultType;
                 }
-                else if (converter is ResourceObjectConverter roc)
+                if (converter is ResourceObjectConverter roc)
                 {
                     return roc.GenerateDefaultTypeNameInternal(objectType);
                 }
